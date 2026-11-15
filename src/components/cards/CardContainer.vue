@@ -19,7 +19,7 @@ export default {
         gap: 1rem;
     }
 
-    @media  screen and (max-width: 425px) {
+    @media screen and (max-width: 425px) {
         .card-holder {
             display: grid;
             grid-template-columns: 1fr;
