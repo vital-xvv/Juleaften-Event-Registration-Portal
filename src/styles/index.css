@@ -1,0 +1,181 @@
+* {
+    border: 0;
+    box-sizing: border-box;
+    background-color: var(--neutral-color);
+    margin: 0;
+    padding: 0;
+    /* Global variables */
+    --primary-color: #1e3f20;
+    --secondary-color: #c93b3b;
+    --tetriary-color: #e5b454;
+    --neutral-color: #fbf7ee;
+    --darker-neutral-color: #F7F3EA ;
+    --dark-primary-color: #07290C;
+    --secondary-red: #B22A2C;
+
+}
+
+@media screen and (max-width:425px) {
+    .button {
+        font-size: 1rem;
+    }
+}
+
+.svg {
+    background-color: inherit;  
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    flex: 1;
+}
+
+.flex-column {
+    display: flex;
+    flex-direction: column;
+}
+
+.pd1 {
+    padding: 1rem;
+}
+
+.pd2 {
+    padding: 2rem;
+}
+
+
+#app {
+    display: flex;
+    flex-direction: column;
+}
+
+h1,h2,h3,h4,h5,h6 {
+    font-family: 'Literata', serif;
+    color: var(--primary-color);
+}
+
+/* Font Sizes*/
+
+.f2 {
+    font-size: 2rem;
+}
+
+.f1_5 {
+    font-size: 1.5rem;
+}
+
+.f1 {
+    font-size: 1rem;
+}
+
+.f075 {
+    font-size: 0.75rem;
+}
+
+.f05 {
+    font-size: 0.5rem;
+}
+
+.f025 {
+    font-size: 0.25rem;
+}
+
+.mrt1 {
+    margin-top: 1rem;
+}
+
+/* Vertical Margin */
+.mrv05 {
+    margin: 0.5rem 0;
+} 
+
+.mrv1 {
+    margin: 1rem 0;
+}
+
+
+.gp2 {
+    gap: 2rem;
+}
+
+
+.button {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 400;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1rem;
+    padding: 0.5rem 1rem;
+    gap: 1rem;
+    box-shadow: 2px 2px 3px rgba(30, 63, 32, 0.08);
+    
+}
+
+.info-card {
+    display: flex;
+    background-color: var(--darker-neutral-color);
+}
+
+
+.signature {
+    font-family: 'Montserrat', sans-serif;
+    color: var(--primary-color);
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.signature-i {
+    font-family: "Redaction 50", serif;
+    font-weight: 400;
+    font-style: italic;
+    color: var(--primary-color);
+    font-weight: 300;
+}
+
+.signature-primary {
+    font-family: 'Literata', serif;
+    color: var(--primary-color);
+    font-weight: bold;
+}
+
+
+button.google {
+    background-color: white;
+    font-weight: 500;
+    transition: transform 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+}
+
+.google:hover {
+    transform: translateY(-2px);
+}
+
+.google:active {
+    box-shadow: 0 1px 3px rgba(30, 63, 32, 0.18);
+    transform: translateY(1px) scale(0.98);
+}
+
+div .icon-frame{
+    align-self: center;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.text {
+    font-family: 'Montserrat', sans-serif;
+    color: var(--primary-color);
+    font-weight: 400;
+}
+
+.text-bold {
+    font-family: 'Montserrat', sans-serif;
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
+
