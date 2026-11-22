@@ -1,30 +1,32 @@
 <template>
-  <div class="card-holder">
+  <div
+    class="card-holder"
+    :style="{ '--cards-count': cardsCount }"
+  >
     <slot/>
   </div>
 </template>
 
-<script>
-export default {
-
-}
+<script setup>
+    defineProps({
+        cardsCount: Number
+    })
 </script>
 
 <style>
     .card-holder {
         display: grid;
-        grid-template-columns: auto;
-        grid-auto-flow: column;
-        margin: 1rem 0;
+        width: 100%;
+        min-width: 0;
+        grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr));
         gap: 1rem;
+        justify-items: stretch;
     }
 
-    @media screen and (max-width: 425px) {
+    @media (max-width: 450px) {
         .card-holder {
-            display: grid;
-            grid-template-columns: 1fr;
-            grid-auto-flow: row;
-            flex-direction: column;
+            grid-template-columns: minmax(0, 1fr);
         }
     }
+
 </style>

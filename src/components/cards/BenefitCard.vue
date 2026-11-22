@@ -9,9 +9,7 @@ defineProps({
 
 <template>
     <div class="container info-card">
-        <div class="icon-frame">
-            <i :class="icon" :style="{ 'color': color }"/>
-        </div>
+        <i :class="icon" :style="{ 'color': color }"/>
         <div class="card-content flex-column">
             <h5 class="f075">{{ title }}</h5>
             <span class="signature f075">{{ description }}</span>
@@ -27,7 +25,6 @@ defineProps({
         border-radius: 14px;
         background-color: var(--darker-neutral-color);
         padding: 1rem;
-        width: 325px;
     }
 
     div.info-card i {
@@ -39,19 +36,11 @@ defineProps({
         gap: 0.5rem;
     }
 
-    div .icon-frame{
-        align-self: center;
-        padding: 4px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
     * {
         background-color: var(--darker-neutral-color);
     }
 
-    @media screen and (max-width: 425px) {
+    @media screen and (max-width: 450px) {
         .icon-card {
             max-width: 200px;
         }

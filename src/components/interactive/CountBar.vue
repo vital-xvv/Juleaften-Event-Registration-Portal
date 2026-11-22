@@ -1,24 +1,22 @@
 <script setup>
-    const guestCount = 42
-    const guestCapacity = 60
-    const fillPercent = Math.min(100, Math.round((guestCount / guestCapacity) * 100))
+    import {eventStatistics} from "@/js/state.js"
 </script>
 
 <template>
     <div class="container flex-column">
         <div class="count-label">
             <span class="signature f075">Gathering Capacity</span>
-            <span class="signature-primary f075">{{ guestCount }} of {{ guestCapacity }} reserved ({{ fillPercent }}%)</span>
+            <span class="signature-primary f075">{{ eventStatistics.filledCapacity }} of {{ eventStatistics.capacity }} reserved ({{ eventStatistics.filledPercentage }}%)</span>
         </div>
         <div
             class="count-line"
             role="progressbar"
-            :aria-valuenow="guestCount"
+            :aria-valuenow="(eventStatistics.filledCapacity)"
             :aria-valuemin="0"
-            :aria-valuemax="guestCapacity"
+            :aria-valuemax="eventStatistics.capacity"
             aria-label="Guests reserved"
         >
-            <div class="count-line__fill" :style="{ width: `${fillPercent}%` }"></div>
+            <div class="count-line__fill" :style="{ width: `${eventStatistics.filledPercentage}%` }"></div>
         </div>
     </div>
 </template>
@@ -46,6 +44,7 @@
     .count-line {
         width: 100%;
         height: 8px;
+        container-type: inline-size;
         overflow: hidden;
         border-radius: 999px;
         background-color: #e5e7eb;
@@ -55,6 +54,8 @@
         height: 100%;
         border-radius: inherit;
         background: linear-gradient(90deg, yellow, orange, red);
+        background-size: 100cqi 100%;
+        background-repeat: no-repeat;
         transition: width 200ms ease;
     }
 

@@ -1,0 +1,174 @@
+{
+    "registrationForm": {
+        "title": "Reserve your spot",
+        "description": "Space is warmly limited to ensure an authentic, unhurried fireside circle for all neighbors.",
+        "googleSignIn": "Continue with Google",
+        "manualDivider": "or fill details manually",
+        "joinWaitlist": "Join the waitlist",
+        "register": "Register for the gathering",
+        "helpPrefix": "Questions or accessibility requests? Reach our event host at",
+        "loading": {
+            "user": "Retrieving user data...",
+            "submit": "Submitting form...",
+            "google": "Signing you in with Google...",
+            "eventInformation": "Fetching event information...",
+            "registrationInformation": "Fetching registration information..."
+        },
+        "data": {
+            "firstName": "First name",
+            "firstNameNote": "Primary guest's first name",
+            "firstNamePlaceholder": "Eleanor",
+            "lastName": "Last name",
+            "lastNameNote": "Primary guest's last name",
+            "lastNamePlaceholder": "Vance",
+            "email": "Email",
+            "emailNote": "For confirmations and directions",
+            "emailPlaceholder": "eleanor.vance{'@'}example.com",
+            "company": "Who are you coming with?",
+            "companyNote": "Tell us who will be joining you",
+            "companionshipOptions": {
+                "family": "I will bring my family",
+                "single": "I will come alone",
+                "friends": "I will come with friends",
+                "couple": "I will come with my partner",
+                "mixed": "Something different"
+            },
+            "companionCount": "Companions",
+            "companionCountNote": "How many people are coming with you?",
+            "note": "Note",
+            "noteOptional": "Optional",
+            "notePlaceholder": "For example, I may arrive a little late..."
+        }
+    },
+
+    "errors": {
+        "NETWORK_ERROR": "Could not connect to the server. Please try again later.",
+        "UNKNOWN_ERROR": "Something went wrong. Please try again.",
+        "INVALID_CREDENTIALS": "The email or password is incorrect.",
+        "LOGIN_FAILED": "Could not sign in. Please try again.",
+        "ACCOUNT_DETAILS_UNAVAILABLE": "You are signed in, but your account details could not be loaded. Please try again.",
+        "REGISTRATION_FAILED": "Could not submit your registration.",
+        "EVENT_INFORMATION_FAILED": "Couldn't fetch the event's data.",
+        "LOGOUT_FAILED": "Couldn't log out. Please try again.",
+        "EMAIL_VERIFICATION_FAILED": "Email verification failed. Please try again.",
+        "EMAIL_VERIFICATION_INVALID_OR_EXPIRED": "Email verification failed. The link may be invalid or expired.",
+        "EMAIL_VERIFICATION_TOKEN_MISSING": "This verification link is missing its token. Please use the link from your email."
+    },
+
+    "my-registration": {
+        "greetingLine": "We look forward to seeing you!",
+        "greeting": "Welcome",
+        "welcomeIntro": "We're glad to welcome you to the upcoming gathering. Here you can see your registration details.",
+        "title": "Your registration",
+        "favour": "If you are running late or something unexpected comes up, please contact us using the email address mentioned in the footer. Thank you for your understanding!",
+        "companionships": {
+            "family": "Family",
+            "friends": "Friends",
+            "single": "On your own",
+            "couple": "As a couple",
+            "mixed": "Mixed group"
+        },
+        "statuses": {
+            "registered": "Registered",
+            "cancelled": "Cancelled",
+            "waiting": "On the waitlist",
+            "inactive": "Inactive"
+        },
+        "data": {
+            "eventTitle": "Event",
+            "comment": "Your comment",
+            "status": "Status",
+            "companionCount": "Number of people with you",
+            "eventCapacity": "Maximum capacity",
+            "commingWith": "I'm coming with",
+            "registrationDate": "Registered on"
+        }
+    },
+
+    "event" : {
+        "info" : {
+            "shortName": "Christmas Evening",
+            "shortDesc": "Ukrainian Family",
+            "name": "Christmas Evening \nin the Ukrainian Community",
+            "dateLabel": "Date",
+            "eventDate": "Sunday, December 13, 2026",
+            "timeLabel": "Time",
+            "eventTime": "4:00–7:00 PM",
+            "timeNote": "Danish local time",
+            "locationLabel": "Location",
+            "eventLocation": "FriKirken",
+            "eventPreciseLocation": "Mariagervej 117, 8920 Randers, Denmark",
+            "description": "We invite everyone to a Christmas evening celebrating the true meaning of Christmas. Enjoy festive food, coffee and tea, activities and crafts for children, warm fellowship, hygge, singing and prayer.",
+            "imageDescription": "The angel said to them, 'Do not be afraid. I bring you good news that will cause great joy for all the people. Today in the town of David a Savior has been born to you; he is the Messiah, the Lord.'\nLuke 2:10-11",
+            "advice": "Dress festively and bring a joyful mood!",
+            "expect": "What to expect?",
+            "expectationCards": [
+                {
+                    "icon": "fa-solid fa-book-bible", 
+                    "color": "#B22A2C", 
+                    "title": "The Christmas Story",
+                    "desc": "Remember the birth of Jesus together, listen to the biblical account, pray and sing Christmas songs."
+                },
+                {
+                    "icon": "fa-solid fa-utensils", 
+                    "color": "#2F6B4F", 
+                    "title": "Festive Dinner",
+                    "desc": "Gather around the same table to enjoy festive dishes, meet new people and spend time in a warm, friendly atmosphere."
+                },
+                {
+                    "icon": "fa-solid fa-palette", 
+                    "color": "#C18A2A",
+                    "title": "Crafts and Entertainment",
+                    "desc": "Create Christmas crafts, play board games and enjoy time together. Activities are available for children and teenagers alike."
+                }
+            ],
+            "infoCards": [
+                {
+                    "title": "Where are we meeting?",
+                    "value": "FriKirken",
+                    "description": "Mariagervej 117, 8920 Randers, Denmark",
+                    "color": "#D69E36",
+                    "icon": "fa-solid fa-location-dot"
+                },
+                {
+                    "title": "When are we celebrating?",
+                    "value": "4:00–7:00 PM",
+                    "description": "Danish local time · 3 hours of celebration",
+                    "color": "#4A90A4",
+                    "icon": "fa-solid fa-clock"
+                },
+                {
+                    "title": "Who is invited?",
+                    "value": "Around 50 guests",
+                    "description": "Ukrainians of all generations—adults, youth, and children!",
+                    "color": "#8B6BA8",
+                    "icon": "fa-solid fa-users"
+                }
+            ]
+        }
+    },
+
+    "login": {
+        "greetingBack": "Welcome Back",
+        "signInCall": "Sign in to view your account and gathering registration.",
+        "data": {
+            "email": "Email Address",
+            "password": "Password"
+        },
+        "signInButton": "Sign in with email",
+        "backToOverview": "Back to event overview",
+        "orTab": "or",
+        "signingIn": "Signing in..."
+    },
+
+    "footer": {
+        "copyright": "© {year} {event}. All rights reserved.",
+        "supportLabel": "Email support",
+        "creditPrefix": "Made with ❤️ by"
+    },
+
+    "tabs": {
+        "overview": "Event Overview",
+        "registration": "My Registration"
+    }
+}

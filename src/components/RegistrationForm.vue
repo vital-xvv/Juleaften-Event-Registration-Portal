@@ -1,66 +1,173 @@
 <script setup>
-    import InfoCard from './cards/BenefitCard.vue'
     import PresentationCard from './cards/PresentationCard.vue'
     import CountBar from "./interactive/CountBar.vue"
     import WaitlistCard from "./cards/WaitlistCard.vue"
+    import RegistrationHeaderCounter from "@/components/RegistrationHeaderCounter.vue"
+    import {registerUser as submitRegistration, getVisitInfo, signInWithGoogle, getDetailedUserInfo, getEventStatistics, getAuthentication} from "@/js/api.js"
+    import {toast} from "@/js/toast.js"
+    import {onMounted, ref} from 'vue'
+    import {isAuthenticated, userProfile, clearVisitInfo, visitInfo, registration, clearFormData, eventStatistics, isVisitPresent, clearEventStatistics, currentPage } from '@/js/state.js'
+    import { startLoading, stopLoading } from '@/js/loading.js'
+    import { useI18n } from 'vue-i18n'
+    import { getErrorMessage } from '@/js/errorMessages.js'
+    import { supportEmail, supportEmailHref } from '@/js/supportContact.js'
+
+    const { t, te } = useI18n()
+
+    function applyUserInfo(apiResponse) {
+        userProfile.value = apiResponse.payload.userProfile;
+    
+        console.log(userProfile.value)
+
+        registration.firstName = userProfile.value.firstName;
+        registration.lastName = userProfile.value.lastName;
+        registration.email = userProfile.value.email;
+
+        isAuthenticated.value = true;
+    }
+
+    onMounted(async () => {
+        startLoading(t('registrationForm.loading.user'));
+        
+        try {
+            const apiResponse = await getAuthentication("Juleaften");
+            applyUserInfo(apiResponse);
+        } catch (error) {
+            isAuthenticated.value = false;
+            userProfile.value = {};
+
+            clearVisitInfo();
+            clearFormData();
+        } finally {
+            stopLoading();
+        }
+
+        await fetchRegistration();
+        
+        await fetchEventStatistics();
+    });
+
+    async function onSubmitRegistration(event) {
+        startLoading(t('registrationForm.loading.submit'))
+        event.preventDefault();
+        try {
+            const apiResponse = await submitRegistration(registration);
+            clearFormData();
+            toast.success(apiResponse.message);
+        } catch(error) {
+            toast.error(getErrorMessage(error, t, te, 'REGISTRATION_FAILED'))
+        } finally {
+            stopLoading();
+        }
+    }
+
+    function onGoogleSignIn(event) {
+        startLoading(t('registrationForm.loading.google'))
+        event.preventDefault();
+        signInWithGoogle();
+        stopLoading();
+    }
+
+    async function fetchEventStatistics() {
+        startLoading(t('registrationForm.loading.eventInformation'))
+        try {
+            const apiResponse = await getEventStatistics("Juleaften"); 
+            eventStatistics.value = apiResponse.payload;
+        } catch (error) {
+            clearEventStatistics();
+            toast.error(getErrorMessage(error, t, te, 'EVENT_INFORMATION_FAILED'))
+        } finally {
+            stopLoading()
+        } 
+    }
+
+    async function fetchRegistration() {
+        startLoading(t('registrationForm.loading.registrationInformation'))
+        try {
+            const apiResponse = await getVisitInfo("Juleaften"); 
+            visitInfo.value = apiResponse.payload;
+        } catch (error) {
+            clearVisitInfo();
+        } finally {
+            stopLoading()
+        } 
+    }
 </script>
 
 
 <template>
-    <div class="container registration-container">
+    <div class="registration-container" :class="{ 'registration-container--registered': isVisitPresent }">
         <PresentationCard/>
-        <form class="container flex-column pd1 form">
-            <div class="header-counter">
-                <span id="counter-name" class="signature f075">FireSide Attendance</span>
-                <span class="spots-counter" aria-label="18 spots available">
-                    <span aria-hidden="true"><img class="svg" src="@/assets/fire.svg" width="24" height="24"/></span>
-                    <strong>18</strong>
-                    <span>spots available</span>
-                </span>
-            </div>
-            <h1>Reserve your spot</h1>
-            <p class="text">Space is warmly limited to ensure an authentic, unhurried fireside circle for all neighbors.</p>
+        <section class="registration-panel" v-if="!isVisitPresent">
+            <RegistrationHeaderCounter/>
+            
+            <h1 class="reserve-spots-tag">{{ $t('registrationForm.title') }}</h1>
+            <p class="text">{{ $t('registrationForm.description') }}</p>
+            
             <CountBar/>
-            <WaitlistCard/>
-            <button class="button google"><img class="svg" src="@/assets/google-icon.svg" alt="Google" width="24" height="24"/>Continue with Google</button>
             
-            <div class="form-divider" aria-hidden="true">or fill details manually</div>
+            <WaitlistCard :canJoinWaitlist="eventStatistics.isFull"/>
             
-        
-            <div class="form-field">
-                <div class="input-title">
-                    <label class="input-label" for="firstName">First Name</label>
-                    <span class="input-note">Primary Guest Name</span>
-                </div>
-                <input class="input" type="text" id="firstName" name="firstName" placeholder="Eleanor" required />
-            </div>
-            <div class="form-field">
-                <div class="input-title">
-                    <label class="input-label" for="lastName">Last Name</label>
-                    <span class="input-note">Primary Guest Lastname</span>
-                </div>
-                <input class="input" type="text" id="lastName" name="lastName" placeholder="Vance" required />
-            </div>
-            <div class="form-field">
-                <div class="input-title">
-                    <label class="input-label" for="email">Email</label>
-                    <span class="input-note">For confirmations & directions</span>
-                </div>
-                <input class="input" type="email" id="email" name="email" placeholder="eleanor.vance@example.com" required />
-            </div>
-            <div class="form-field">
-                <div class="input-title">
-                    <label class="input-label" for="comment">Note</label>
-                    <span class="input-note">Optional</span>
-                </div>
-                <textarea class="textarea" id="comment" name="comment" maxlength="250" placeholder="e.g.,I will come a little later, so don't worry if you don't find me from the start..."></textarea>
-            </div>
+            <button v-show="!isAuthenticated" class="button google" @click="e => onGoogleSignIn(e)"><img class="svg" src="@/assets/google-icon.svg" alt="Google" width="24" height="24"/>{{ $t('registrationForm.googleSignIn') }}</button>
             
-            <button class="register-button" type="submit">Register for the Gathering</button>
-            <span class="signature f05 help">Questions or accessibility requests? Reach our parlor steward at <a class="mail-help" href="mailto:hello@evergreenyuletide.org">hello@evergreenyuletide.org</a></span>
-        </form>
-
-        
+            <form v-show="!isVisitPresent" class="form" @submit="e => onSubmitRegistration(e)">
+                <div class="form-divider" aria-hidden="true">{{ $t('registrationForm.manualDivider') }}</div>
+                
+                <div class="form-field">
+                    <div class="input-title">
+                        <label class="input-label" for="firstName">{{ $t('registrationForm.data.firstName') }}</label>
+                        <span class="input-note">{{ $t('registrationForm.data.firstNameNote') }}</span>
+                    </div>
+                    <input class="input" type="text" :disabled="isAuthenticated" id="firstName" v-model="registration.firstName" :placeholder="$t('registrationForm.data.firstNamePlaceholder')" required />
+                </div>
+                <div class="form-field">
+                    <div class="input-title">
+                        <label class="input-label" for="lastName">{{ $t('registrationForm.data.lastName') }}</label>
+                        <span class="input-note">{{ $t('registrationForm.data.lastNameNote') }}</span>
+                    </div>
+                    <input class="input" type="text" id="lastName" :disabled="isAuthenticated" v-model="registration.lastName" :placeholder="$t('registrationForm.data.lastNamePlaceholder')" required />
+                </div>
+                <div class="form-field">
+                    <div class="input-title">
+                        <label class="input-label" for="email">{{ $t('registrationForm.data.email') }}</label>
+                        <span class="input-note">{{ $t('registrationForm.data.emailNote') }}</span>
+                    </div>
+                    <input class="input" type="email" id="email" :disabled="isAuthenticated" v-model="registration.email" :placeholder="$t('registrationForm.data.emailPlaceholder')" required />
+                </div>
+                
+                <div class="form-field">
+                    <div class="input-title">
+                        <label class="input-label" for="companionship">{{ $t('registrationForm.data.company') }}</label>
+                        <span class="input-note">{{ $t('registrationForm.data.companyNote') }}</span>
+                    </div>
+                    <select class="input" id="companionship" v-model="registration.companionship">
+                        <option value="FAMILY">{{ $t('registrationForm.data.companionshipOptions.family') }}</option>
+                        <option value="SINGLE">{{ $t('registrationForm.data.companionshipOptions.single') }}</option>
+                        <option value="FRIENDS">{{ $t('registrationForm.data.companionshipOptions.friends') }}</option>
+                        <option value="COUPLE">{{ $t('registrationForm.data.companionshipOptions.couple') }}</option>
+                        <option value="MIXED">{{ $t('registrationForm.data.companionshipOptions.mixed') }}</option>
+                    </select>
+                </div>
+                <div class="form-field" v-if="['FAMILY', 'FRIENDS', 'MIXED'].includes(registration.companionship)">
+                    <div class="input-title">
+                        <label class="input-label" for="companionCount">{{ $t('registrationForm.data.companionCount') }}</label>
+                        <span class="input-note">{{ $t('registrationForm.data.companionCountNote') }}</span>
+                    </div>
+                    <input class="input" type="number" id="companionCount" v-model.number="registration.companionCount" name="companionCount" min="1" />
+                </div>
+                <div class="form-field">
+                    <div class="input-title">
+                        <label class="input-label" for="note">{{ $t('registrationForm.data.note') }}</label>
+                        <span class="input-note">{{ $t('registrationForm.data.noteOptional') }}</span>
+                    </div>
+                    <textarea class="textarea" id="note" v-model="registration.note" maxlength="250" :placeholder="$t('registrationForm.data.notePlaceholder')"></textarea>
+                </div>
+                
+                <button class="register-button" type="submit">{{ eventStatistics.isFull ? $t('registrationForm.joinWaitlist') : $t('registrationForm.register')}}</button>
+                <span class="signature f05 help" v-if="supportEmail">{{ $t('registrationForm.helpPrefix') }} <a class="mail-help" :href="supportEmailHref">{{ supportEmail }}</a></span>
+            </form>
+            
+        </section>
     </div>
 </template>
 
@@ -69,46 +176,31 @@
 
 <style scoped>
 
-    .form {
+    .registration-panel {
+        display: flex;
+        flex-direction: column;
         justify-content: flex-start;
+        gap: 1rem;
         padding: 2rem;
-    }
-
-    #counter-name {
-        color: red;
+        min-width: 0;
+        background-color: var(--neutral-color);
     }
 
     h1, h2 {
         color: var(--dark-primary-color);
     }
 
-    .header-counter {
+    .form {
         display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-
-    .spots-counter {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.4rem;
-        padding: 0.2rem 2rem;
-        border: 1px solid #f1b6b6;
-        border-radius: 999px;
-        background: #fff0f0;
-        color: #a52a2a;
-        font-size: 0.875rem;
-        font-weight: 600;
-        white-space: nowrap;
-    }
-
-    .spots-counter strong {
-        font-size: 1rem;
+        flex-direction: column;
+        justify-content: flex-start;
+        gap: 1rem;
+        min-width: 0;
     }
 
     .help {
         text-align: center;
-        align-self: flex-end;
+        margin-top: auto;
     }
 
     .mail-help {
@@ -116,9 +208,22 @@
     }
 
     .registration-container {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        align-items: stretch;
+        place-content: center;
+        grid-template-rows: auto;
         position: relative;
+        width: 100%;
+        min-width: 0;
+        border-bottom-left-radius: 12px;
+        border-bottom-right-radius: 12px;
         box-shadow: 0 8px 16px -8px rgba(0, 0, 0, 0.10),
                 0 2px 6px -4px rgba(0, 0, 0, 0.06);
+    }
+
+    .registration-container--registered {
+        grid-template-columns: minmax(0, 1fr);
     }
 
     .registration-container::before {
@@ -138,15 +243,24 @@
         );
     }
 
-    @media screen and (max-width: 425px) {
+    @media (max-width: 450px) {
         .registration-container {
-            flex-direction: column;
-            max-width: 300px;
+            grid-template-columns: minmax(0, 1fr);
         }
-    }
 
-    form.container {
-        gap: 1rem;
+        .registration-panel {
+            padding: 1rem;
+        }
+
+        .input, .textarea {
+            box-sizing: border-box;
+            width: 100%;
+            min-width: 0;
+        }
+
+        .reserve-spots-tag {
+            font-size: 1.5rem;
+        }
     }
 
     .form-field {
@@ -191,6 +305,11 @@
         padding: 0.75rem;
         border: none;
         box-shadow: 2px 2px 3px rgba(30, 63, 32, 0.08);
+    }
+
+    .input:disabled, .textarea:disabled {
+        color: #999;
+        cursor: not-allowed;
     }
 
     .textarea {
@@ -295,6 +414,10 @@
         .register-button::before {
             transition: none;
         }
+    }
+
+    @media (max-width: 450px) {
+
     }
 
     p {

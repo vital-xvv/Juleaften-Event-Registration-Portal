@@ -1,16 +1,9 @@
 <script setup>
-  import {ref} from 'vue'
-
   import Layout from '@/components/layouts/Layout.vue'
-  import Main from '@/components/pages/Main.vue'
-
-
 </script>
 
 <template>
-  <Layout>
-    <Main/>
-  </Layout>
+  <Layout />
 </template>
 
 <style scoped>

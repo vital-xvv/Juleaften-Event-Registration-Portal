@@ -1,7 +1,7 @@
 * {
     border: 0;
     box-sizing: border-box;
-    background-color: var(--neutral-color);
+    
     margin: 0;
     padding: 0;
     /* Global variables */
@@ -15,7 +15,7 @@
 
 }
 
-@media screen and (max-width:425px) {
+@media screen and (max-width:450px) {
     .button {
         font-size: 1rem;
     }
@@ -156,14 +156,6 @@ button.google {
 .google:active {
     box-shadow: 0 1px 3px rgba(30, 63, 32, 0.18);
     transform: translateY(1px) scale(0.98);
-}
-
-div .icon-frame{
-    align-self: center;
-    padding: 4px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
 }
 
 .text {

@@ -2,54 +2,50 @@
     import RegistrationForm from '@/components/RegistrationForm.vue'
     import BenefitCard from '@/components/cards/BenefitCard.vue'
     import CardContainer from "../cards/CardContainer.vue"
-
-    const footerCardsSettings = [
-        {
-            icon: 'fa-solid fa-calendar',
-            title: 'Complimentary Hearth',
-            description: 'Saturday, November 18th at 2:00 PM',
-            additionalInfo: '5:00 PM - 9:00 PM DK',
-            color: '#07290C'
-
-        },
-        {
-            icon: 'fa-solid fa-location-dot',
-            title: 'All Ages & Families',
-            description: 'The Heart Gathering, Copenhagen, Denmark',
-            additionalInfo: '',
-            color: '#B22A2C'
-        },
-        {
-            icon: 'fa-solid fa-user-group',
-            title: 'Winter Parking & Shuttles',
-            description: '50+ people expected to attend',
-            additionalInfo: '',
-            color: '#446744'
-        }
-    ]
+    import ToastContainer from '../notification/ToastContainer.vue'
 </script>
 
 <template>
-    <div class="container flex-column">
-        <RegistrationForm/>
-        <CardContainer>
-            <BenefitCard v-for="card in footerCardsSettings" :key="card.title" v-bind="card"/>
-        </CardContainer>
+    <div class="main-page-content">
+        <RegistrationForm class="card-with-form"/>
+        <ToastContainer class="toast-container"/>
     </div>
 </template>
 
 
 <style scoped>
 
-    .container {
+    .main-page-content {
         border-radius: 14px;
-        margin: 0.5rem auto;
-        max-width: 1000px;
+        padding: 1rem;
+        row-gap: 1rem;
+        display: grid;
+        grid-template-columns: repeat(6, minmax(0, 1fr));
+        grid-template-rows: auto 1fr;
+        justify-items: center;
+        background-image: url("@/assets/Minimalist Christmas Tree Pattern.png");
+        background-repeat: repeat;
+        background-size: 600px auto;
     }
 
-    @media screen and (max-width: 425px) {
-        .container {
-            width: 200px;
+    .card-with-form {
+        grid-column: 2 / span 4;
+        grid-row: 1;
+    }
+
+    .toast-container {
+        grid-column: 5 / 7;
+        grid-row: 1;
+        justify-self: end;
+    }
+
+    @media screen and (max-width: 450px) {
+        .main-page-content {
+            grid-template-columns: 1fr;
+        }
+
+        .toast-container {
+            grid-column: 1;
         }
     }
 

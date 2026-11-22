@@ -1,56 +1,82 @@
 <script setup>
+    import { computed } from "vue"
+    import { useI18n } from "vue-i18n"
     import ImageCard from "./ImageCard.vue"
     import CardContainer from "./CardContainer.vue"
     import ExpectationCard from "./ExpectationCard.vue"
     import InfoCard from "./InfoCard.vue"
 
-    const cardsSettings = [
-        {
-            icon: 'fa-solid fa-calendar',
-            title: 'Complimentary Hearth',
-            description: 'Saturday, November 18th at 2:00 PM',
-            additionalInfo: '5:00 PM - 9:00 PM DK',
-            color: '#07290C'
-
-        },
-        {
-            icon: 'fa-solid fa-location-dot',
-            title: 'All Ages & Families',
-            description: 'The Heart Gathering, Copenhagen, Denmark',
-            additionalInfo: 'Stone Great Hall',
-            color: '#B22A2C'
-        }
-    ]
+    const { tm, rt, locale } = useI18n()
+    const expectationCards = computed(() => {
+        // Read locale explicitly so this computed value refreshes on language changes.
+        locale.value
+        const cards = tm('event.info.expectationCards')
+        return Array.isArray(cards)
+            ? cards.map(card => ({
+                ...card,
+                title: rt(card.title),
+                desc: rt(card.desc)
+            }))
+            : []
+    }); 
+    const infoCards = computed(() => {
+        locale.value
+        const cards = tm('event.info.infoCards')
+        return Array.isArray(cards)
+            ? cards.map(card => ({
+                ...card,
+                title: rt(card.title),
+                description: rt(card.value),
+                additionalInfo: rt(card.description)
+            }))
+            : []
+    })
 </script>
 
 
 <template>
-    <div class="container flex-column pd2">
+    <div class="main-body">
+       
         <div class="header-logo">
             <i id="fire-icon" class="fa-sharp fa-solid fa-fire"/>
             <div id="logo-text">
-                <span class="red-signature">The Heart Gathering</span>
-                <span class="signature"><i class="fa-solid fa-tree f075"></i> Annual Retreat</span>
+                <span class="red-signature">{{ $t('event.info.shortName') }}</span>
+                <span class="signature"><i class="fa-solid fa-tree f075"></i> {{ $t('event.info.shortDesc') }}</span>
             </div>
         </div>
-        <h1>Annual Heart Gathering Juletide</h1>
-        <p class="text f1">Join us for a transformative experience of connection, growth, and inspiration. Our annual retreat is designed to foster meaningful connections, personal development, and a sense of community.</p>
-        <CardContainer>
-            <InfoCard v-for="card in cardsSettings" :key="card.title" v-bind="card"/>
-        </CardContainer>
-        <ImageCard/>
-        <div class="section-divider">
-            <span class="divider-star" aria-hidden="true">✦</span>
-            <span class="divider-title">What to expect</span>
-            <span class="divider-line" aria-hidden="true"><i></i></span>
-        </div>
-        <CardContainer>
-            <ExpectationCard color="red"/>
-            <ExpectationCard color="red"/>
-            <ExpectationCard color="red"/>
+        
+        <h1>{{ $t('event.info.name') }}</h1>
+        
+        <p class="text">{{ $t('event.info.description') }}</p>
+
+        <CardContainer :cardsCount="infoCards.length">
+            <InfoCard
+                v-for="card in infoCards"
+                :key="card.title"
+                v-bind="card"
+            />
         </CardContainer>
         
-        <div class="signature f075 mrt1"><i class="fa-solid fa-leaf"></i> Dress: Cozy winter flannel, sweaters & warm knitwear</div>
+        <ImageCard/>
+        
+        <div class="section-divider">
+            <span class="divider-star" aria-hidden="true">✦</span>
+            <span class="divider-title">{{ $t('event.info.expect') }}</span>
+            <span class="divider-line" aria-hidden="true"><i></i></span>
+        </div>
+
+        <CardContainer :cardsCount="expectationCards.length">
+            <ExpectationCard
+                v-for="(card, index) in expectationCards"
+                :key="`expectation-${index}-${card.title}`"
+                :title="card.title"
+                :description="card.desc"
+                :icon="card.icon"
+                :color="card.color"
+            />
+        </CardContainer>
+        
+        <div class="signature f075 dress-advice"><i class="fa-solid fa-leaf"></i> {{ $t('event.info.advice') }}</div>
     </div>
 </template>
 
@@ -59,10 +85,18 @@
         background-color: white;
     }
 
+    .main-body {
+        display: flex;
+        align-items: flex-start;
+        gap: 1rem;
+        flex-direction: column;
+        padding: 2rem;
+    }
+
     h1 {
         color: var(--dark-primary-color);
-        margin: 1rem 0;
         font-size: 2.5rem;
+        white-space: pre-line;
     }
 
     .red-signature {
@@ -76,6 +110,10 @@
 
     .signature {
         text-transform: capitalize;
+    }
+
+    .dress-advice {
+        margin-top: auto;
     }
 
     .header-logo {
@@ -142,6 +180,21 @@
         border: 1px solid #B22A2C;
         background: white;
         transform: translateY(-50%) rotate(45deg);
+    }
+
+    @media (max-width: 450px) {
+
+        h1 {
+            font-size: 1.5rem;
+        }
+
+        .main-body {
+            padding: 1rem;
+        }
+
+        .text {
+            font-size: 0.75rem;
+        }
     }
 
 </style>
