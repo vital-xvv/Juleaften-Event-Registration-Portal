@@ -1,7 +1,7 @@
 <script setup>
     import { reactive, ref } from 'vue'
     import { useI18n } from 'vue-i18n'
-    import { getDetailedUserInfo, login, signInWithGoogle } from '@/js/api.js'
+    import { getAuthentication, getEventStatistics, getVisitInfo, login, signInWithGoogle } from '@/js/api.js'
     import { getErrorMessage } from '@/js/errorMessages.js'
     import { currentPage, eventStatistics, isAuthenticated, isVisitPresent, registration, userProfile, visitInfo } from '@/js/state.js'
     import { toast } from '@/js/toast.js'
@@ -38,28 +38,33 @@
         let sessionCreated = false
 
         try {
-            const response = await login({
+            const loginResponse = await login({
                 email: credentials.email.trim(),
                 password: credentials.password
             })
             sessionCreated = true
 
-            const detailsResponse = await getDetailedUserInfo('Juleaften')
-            const details = detailsResponse.payload
-            if (!details?.userProfile || !details?.visitInfo) {
+            const [authenticationResponse, visitResponse, statisticsResponse] = await Promise.all([
+                getAuthentication(),
+                getVisitInfo('Juleaften'),
+                getEventStatistics('Juleaften')
+            ])
+            const profile = authenticationResponse.payload?.userProfile
+            const visit = visitResponse.payload
+            if (!profile || !visit) {
                 throw new Error('Account details were missing from the response.')
             }
 
-            userProfile.value = details.userProfile
-            eventStatistics.value = details.eventStatistics
-            visitInfo.value = details.visitInfo
-            registration.firstName = details.userProfile.firstName
-            registration.lastName = details.userProfile.lastName
-            registration.email = details.userProfile.email
+            userProfile.value = profile
+            eventStatistics.value = statisticsResponse.payload
+            visitInfo.value = visit
+            registration.firstName = profile.firstName
+            registration.lastName = profile.lastName
+            registration.email = profile.email
             isAuthenticated.value = true
             currentPage.value = isVisitPresent.value ? 'registration' : 'overview'
             credentials.password = ''
-            toast.success(response.message || 'You have been signed in.')
+            toast.success(loginResponse.message || 'You have been signed in.')
         } catch (error) {
             errorMessage.value = loginError(error, sessionCreated)
         } finally {

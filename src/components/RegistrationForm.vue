@@ -3,7 +3,7 @@
     import CountBar from "./interactive/CountBar.vue"
     import WaitlistCard from "./cards/WaitlistCard.vue"
     import RegistrationHeaderCounter from "@/components/RegistrationHeaderCounter.vue"
-    import {registerUser as submitRegistration, getVisitInfo, signInWithGoogle, getDetailedUserInfo, getEventStatistics, getAuthentication} from "@/js/api.js"
+    import {registerUser as submitRegistration, getVisitInfo, signInWithGoogle, getEventStatistics, getAuthentication} from "@/js/api.js"
     import {toast} from "@/js/toast.js"
     import {onMounted, ref} from 'vue'
     import {isAuthenticated, userProfile, clearVisitInfo, visitInfo, registration, clearFormData, eventStatistics, isVisitPresent, clearEventStatistics, currentPage } from '@/js/state.js'
