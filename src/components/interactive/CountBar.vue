@@ -1,65 +1,102 @@
 <script setup>
-    import {eventStatistics} from "@/js/state.js"
+    import { computed } from 'vue'
+    import { eventStatistics } from '@/js/state.js'
+
+    const availablePlaces = computed(() => Math.max(
+        eventStatistics.value.capacity - eventStatistics.value.filledCapacity,
+        0
+    ))
 </script>
 
 <template>
-    <div class="container flex-column">
-        <div class="count-label">
-            <span class="signature f075">Gathering Capacity</span>
-            <span class="signature-primary f075">{{ eventStatistics.filledCapacity }} of {{ eventStatistics.capacity }} reserved ({{ eventStatistics.filledPercentage }}%)</span>
+    <section class="capacity-card" :aria-label="$t('registrationForm.capacity.title')">
+        <div class="capacity-heading">
+            <span class="capacity-title">{{ $t('registrationForm.capacity.title') }}</span>
+            <span class="capacity-available" :class="{ 'capacity-available--full': availablePlaces === 0 }">
+                {{ $t('registrationForm.capacity.available', { count: availablePlaces }) }}
+            </span>
         </div>
+        <span class="capacity-summary">
+            {{ $t('registrationForm.capacity.reserved', {
+                filled: eventStatistics.filledCapacity,
+                capacity: eventStatistics.capacity,
+                percentage: eventStatistics.filledPercentage
+            }) }}
+        </span>
         <div
             class="count-line"
             role="progressbar"
             :aria-valuenow="(eventStatistics.filledCapacity)"
             :aria-valuemin="0"
             :aria-valuemax="eventStatistics.capacity"
-            aria-label="Guests reserved"
+            :aria-label="$t('registrationForm.capacity.progressLabel')"
         >
             <div class="count-line__fill" :style="{ width: `${eventStatistics.filledPercentage}%` }"></div>
         </div>
-    </div>
+    </section>
 </template>
 
 
 
 <style scoped>
-    .count-label {
+    .capacity-card {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        flex: none;
+        padding: 0.9rem 1rem;
+        border: 1px solid #e8e4da;
+        border-radius: 10px;
+        background: linear-gradient(145deg, #ffffff, #fbf7ee);
+        box-shadow: 0 3px 10px rgb(30 63 32 / 6%);
+    }
+
+    .capacity-heading {
         display: flex;
         justify-content: space-between;
         align-items: center;
-    }
-
-    .flex-column {
+        flex-wrap: wrap;
         gap: 0.5rem;
-        flex: none;
     }
 
-    .container {
-        background-color: white;
-        padding: 0.75rem 0.5rem;
-        border-radius: 6px;
+    .capacity-title {
+        color: var(--dark-primary-color);
+        font: 700 0.8rem 'Montserrat', sans-serif;
+    }
+
+    .capacity-available {
+        padding: 0.25rem 0.55rem;
+        border-radius: 999px;
+        background: #e8f1e7;
+        color: #24552b;
+        font: 600 0.7rem 'Montserrat', sans-serif;
+    }
+
+    .capacity-available--full {
+        background: #f8e9e5;
+        color: #9c302a;
+    }
+
+    .capacity-summary {
+        color: #625e56;
+        font: 400 0.75rem/1.4 'Montserrat', sans-serif;
     }
 
     .count-line {
         width: 100%;
-        height: 8px;
+        height: 0.65rem;
         container-type: inline-size;
         overflow: hidden;
         border-radius: 999px;
-        background-color: #e5e7eb;
+        background-color: #e8e7df;
     }
 
     .count-line__fill {
         height: 100%;
         border-radius: inherit;
-        background: linear-gradient(90deg, yellow, orange, red);
+        background: linear-gradient(90deg, #4b9b5b, #d6aa35 72%, #bd413b);
         background-size: 100cqi 100%;
         background-repeat: no-repeat;
-        transition: width 200ms ease;
-    }
-
-    div, span {
-        background-color: inherit;
+        transition: width 300ms ease;
     }
 </style>

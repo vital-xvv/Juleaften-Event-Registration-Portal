@@ -6,6 +6,18 @@
         "manualDivider": "or fill details manually",
         "joinWaitlist": "Join the waitlist",
         "register": "Register for the gathering",
+        "waitlist": {
+            "title": "All places are currently reserved",
+            "description": "You can still register for the waitlist. If a place becomes available due to a cancellation, we’ll contact you."
+        },
+        "capacity": {
+            "title": "Gathering capacity",
+            "counterTitle": "Gathering attendance",
+            "reserved": "{filled} of {capacity} places reserved ({percentage}%)",
+            "available": "Available places: {count}",
+            "availableShort": "spots available",
+            "progressLabel": "Guests reserved"
+        },
         "helpPrefix": "Questions or accessibility requests? Reach our event host at",
         "loading": {
             "user": "Retrieving user data...",
@@ -48,6 +60,8 @@
         "LOGIN_FAILED": "Could not sign in. Please try again.",
         "ACCOUNT_DETAILS_UNAVAILABLE": "You are signed in, but your account details could not be loaded. Please try again.",
         "REGISTRATION_FAILED": "Could not submit your registration.",
+        "REGISTRATION_ILLEGAL_PARTY_COUNT": "The number of people in your party is invalid. Please check the guest count and try again.",
+        "REGISTRATION_ALREADY_EXISTS": "You already have a registration for this event.",
         "EVENT_INFORMATION_FAILED": "Couldn't fetch the event's data.",
         "LOGOUT_FAILED": "Couldn't log out. Please try again.",
         "EMAIL_VERIFICATION_FAILED": "Email verification failed. Please try again.",

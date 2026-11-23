@@ -1,16 +1,25 @@
 <script setup>
-    import { eventStatistics } from '@/js/state';
+    import { computed } from 'vue'
+    import { eventStatistics } from '@/js/state.js'
+
+    const availablePlaces = computed(() => Math.max(
+        eventStatistics.value.capacity - eventStatistics.value.filledCapacity,
+        0
+    ))
 </script>
 
 <template>
     <div class="header-counter">
-        <span id="counter-name" class="signature">FireSide Attendance</span>
-        <span class="spots-counter" aria-label="18 spots available">
+        <span class="counter-title signature">{{ $t('registrationForm.capacity.counterTitle') }}</span>
+        <span
+            class="spots-counter"
+            :aria-label="$t('registrationForm.capacity.available', { count: availablePlaces })"
+        >
             <span aria-hidden="true">
                 <img class="svg" src="@/assets/fire.svg" width="24" height="24" alt="" />
             </span>
-            <strong>{{eventStatistics.capacity - eventStatistics.filledCapacity}}</strong>
-            <span>spots available</span>
+            <strong>{{ availablePlaces }}</strong>
+            <span>{{ $t('registrationForm.capacity.availableShort') }}</span>
         </span>
     </div>
 </template>
@@ -23,7 +32,7 @@
         gap: 0.75rem;
     }
 
-    #counter-name {
+    .counter-title {
         color: red;
         font-size: 0.75rem;
     }
@@ -47,7 +56,7 @@
     }
 
     @media (max-width: 450px) {
-        #counter-name {
+        .counter-title {
             font-size: 0.5rem;
         }
 
