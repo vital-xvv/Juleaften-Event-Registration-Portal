@@ -146,8 +146,8 @@
                 },
                 {
                     "title": "When are we celebrating?",
-                    "value": "4:00–7:00 PM",
-                    "description": "Danish local time · 3 hours of celebration",
+                    "value": "December 13th, 2026, 4:00–7:00 PM",
+                    "description": "{eventDate}\nDanish local time",
                     "color": "#4A90A4",
                     "icon": "fa-solid fa-clock"
                 },

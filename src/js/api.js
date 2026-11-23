@@ -12,7 +12,6 @@ export const api = axios.create({
 
 // Authentication
 export const login = async (requestBody) => {
-    console.log(requestBody);
     const response = await api.post('/auth', requestBody);
     return response.data;
 }

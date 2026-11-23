@@ -16,8 +16,6 @@
 
     function applyUserInfo(apiResponse) {
         userProfile.value = apiResponse.payload.userProfile;
-    
-        console.log(userProfile.value)
 
         registration.firstName = userProfile.value.firstName;
         registration.lastName = userProfile.value.lastName;
@@ -27,24 +25,7 @@
     }
 
     onMounted(async () => {
-        startLoading(t('registrationForm.loading.user'));
-        
-        try {
-            const apiResponse = await getAuthentication("Juleaften");
-            applyUserInfo(apiResponse);
-        } catch (error) {
-            isAuthenticated.value = false;
-            userProfile.value = {};
-
-            clearVisitInfo();
-            clearFormData();
-        } finally {
-            stopLoading();
-        }
-
-        await fetchRegistration();
-        
-        await fetchEventStatistics();
+        fetchPage();
     });
 
     async function onSubmitRegistration(event) {
@@ -54,6 +35,8 @@
             const apiResponse = await submitRegistration(registration);
             clearFormData();
             toast.success(apiResponse.message);
+
+            await fetchPage();
         } catch(error) {
             toast.error(getErrorMessage(error, t, te, 'REGISTRATION_FAILED'))
         } finally {
@@ -92,6 +75,33 @@
             stopLoading()
         } 
     }
+
+    
+    async function fetchUserProfile() {
+        startLoading(t('registrationForm.loading.user'));
+        
+        try {
+            const apiResponse = await getAuthentication("Juleaften");
+            applyUserInfo(apiResponse);
+        } catch (error) {
+            isAuthenticated.value = false;
+            userProfile.value = {};
+
+            clearVisitInfo();
+            clearFormData();
+        } finally {
+            stopLoading();
+        }
+    }
+
+    async function fetchPage() {
+        await fetchUserProfile();
+
+        await fetchRegistration();
+        
+        await fetchEventStatistics();
+    }
+
 </script>
 
 
